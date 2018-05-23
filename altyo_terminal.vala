@@ -1626,7 +1626,7 @@ public class VTTerminal : AYTab{
         vte_text=vte_text.strip();
         debug("expect=%s get '%s'",expect_string,vte_text);
         if(GLib.Regex.match_simple(".*"+expect_string+".*",vte_text,RegexCompileFlags.CASELESS,0)){
-          this.vte_term.feed_child(paste,paste.length);
+          this.vte_term.feed_child((char[])paste);
           if(cb!=null) cb();
           return false;
         }else
@@ -1747,7 +1747,7 @@ public class VTTerminal : AYTab{
       if(port!="") port=" -p "+port;
       string cmd="ssh %s@%s %s\n".printf(user_name,host_name,port);
       debug("ssh = %s",cmd);
-      this.vte_term.feed_child(cmd,cmd.length);
+      this.vte_term.feed_child((char[])cmd);
     }else if(tauth.type=="ssh"){
       string[] commands=command.split(",");
       if(commands.length==3 && commands[0]=="ssh" && commands[1].contains("expect-user=") && commands[2].contains("expect-password=")){
@@ -1755,7 +1755,7 @@ public class VTTerminal : AYTab{
         if(port!="") port=" -p "+port;
         string cmd="ssh %s@%s %s\n".printf(user_name,host_name,port);
         debug("ssh = %s",cmd);
-        this.vte_term.feed_child(cmd,cmd.length);
+        this.vte_term.feed_child((char[])cmd);
         string tmp=commands[1];
         var idx=tmp.index_of_char('=',0)+1;
         string expect_name=tmp.substring(idx,tmp.length-idx);
@@ -1775,7 +1775,7 @@ public class VTTerminal : AYTab{
           if(port!="") port=" -p "+port;
           string cmd="ssh %s@%s %s\n".printf(user_name,host_name,port);
           debug("ssh = %s",cmd);
-          this.vte_term.feed_child(cmd,cmd.length);
+          this.vte_term.feed_child((char[])cmd);
           string tmp=commands[1];
           var idx=tmp.index_of_char('=',0)+1;
           string expect_password=tmp.substring(idx,tmp.length-idx);
@@ -1788,7 +1788,7 @@ public class VTTerminal : AYTab{
         if(commands.length==2 && commands[0]=="ssh" && commands[1].contains("paste-password")){
           debug(" paste-password=%s",user_password);
           user_password+="\n";
-          this.vte_term.feed_child(user_password,user_password.length);
+          this.vte_term.feed_child((char[])user_password);
         }
     }/*else if(){
     }*/
